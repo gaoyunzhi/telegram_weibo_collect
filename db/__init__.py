@@ -9,14 +9,14 @@ def getFile(name):
 
 class DBItem(object):
 	def __init__(self, name):
-		self.db = getFile(name)
+		self.items = getFile(name)
 		self.fn = 'db/' + name
 
 	def add(self, x):
 		x = x.strip()
-		if x in self.db:
+		if x in self.items:
 			return
-		self.db.add(x)
+		self.items.add(x)
 		with open(fn, 'a') as f:
 			f.write('\n' + x)
 
@@ -26,6 +26,9 @@ class DBItem(object):
 
 class DB(object):
 	def __init__(self):
+		self.reload()
+
+	def reload(self):
 		self.users = DBItem('users')
 		self.keywords = DBItem('keywords')
 		self.existing = DBItem('existing')
