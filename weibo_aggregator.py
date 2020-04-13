@@ -92,10 +92,10 @@ def command(update, context):
 	# TODO: add command to add user, add keyword, refer douban code if needed
 
 if 'once' not in sys.argv:
+	threading.Timer(1, loop).start()
 	tele.dispatcher.add_handler(MessageHandler(
 		Filters.update.channel_post & Filters.command, command))
 	tele.start_polling()
 	tele.idle()
-	threading.Timer(1, loop).start()
 else:
 	loopImp()

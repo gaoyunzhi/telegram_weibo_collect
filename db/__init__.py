@@ -17,7 +17,7 @@ class DBItem(object):
 		if x in self.items:
 			return
 		self.items.add(x)
-		with open(fn, 'a') as f:
+		with open(self.fn, 'a') as f:
 			f.write('\n' + x)
 
 	def remove(self, x):
