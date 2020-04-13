@@ -162,48 +162,35 @@ def loopImp():
 	removeOldFiles('tmp')
 	removeOldFiles('tmp_image')
 	sg.reset()
-	for name in db.getChannels():
-		if name == 'today_read':
-			url_prefix = 'https://www.douban.com/people/gyz/statuses'
-		elif name == 'douban_one':
-			url_prefix = 'https://www.douban.com/people/139444387/statuses'
-		else:
-			url_prefix = 'https://www.douban.com/'
-		processChannel(name, url_prefix)
+	db = DB()
 
 def loop():
 	loopImp()
 	threading.Timer(60 * 60 * 2, loop).start() 
 
-@log_on_fail(debug_group)
-def private(update, context):
-	update.message.reply_text('Add me to public channel, then use /d_sc to set your douban cookie')
-
-def commandInternal(msg):
-	command, text = splitCommand(msg.text)
-	if matchKey(command, ['/d_sc', 'set_cookie']):
-		return db.setCookie(msg.chat.username, text)
-	if matchKey(command, ['/d_ba', 'blacklist_ba']):
-		return db.blacklistAdd(msg.chat.username, text)
-	if matchKey(command, ['/d_br', 'blacklist_br']):
-		return db.blacklistRemove(msg.chat.username, text)
-	if matchKey(command, ['/d_bl', 'blacklist_list']):
-		return 'blacklist:\n' + '\n'.join(db.getBlacklist(msg.chat.username))
+# def commandInternal(msg):
+# 	command, text = splitCommand(msg.text)
+# 	if matchKey(command, ['/d_sc', 'set_cookie']):
+# 		return db.setCookie(msg.chat.username, text)
+# 	if matchKey(command, ['/d_ba', 'blacklist_ba']):
+# 		return db.blacklistAdd(msg.chat.username, text)
+# 	if matchKey(command, ['/d_br', 'blacklist_br']):
+# 		return db.blacklistRemove(msg.chat.username, text)
+# 	if matchKey(command, ['/d_bl', 'blacklist_list']):
+# 		return 'blacklist:\n' + '\n'.join(db.getBlacklist(msg.chat.username))
 
 @log_on_fail(debug_group)
 def command(update, context):
 	msg= update.channel_post
-	if not msg.text.startswith('/d'):
+	if not msg.text.startswith('/w'):
 		return
-	r = commandInternal(msg)
-	if not r:
-		return
-	autoDestroy(msg.reply_text(r), 0.1)
-	msg.delete()
+	# r = commandInternal(msg)
+	# if not r:
+	# 	return
+	# autoDestroy(msg.reply_text(r), 0.1)
+	# msg.delete()
 
 if 'once' not in sys.argv:
-	tele.dispatcher.add_handler(MessageHandler(
-		Filters.text & Filters.private, private))
 	tele.dispatcher.add_handler(MessageHandler(
 		Filters.update.channel_post & Filters.command, command))
 	tele.start_polling()
