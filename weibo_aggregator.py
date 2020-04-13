@@ -158,7 +158,15 @@ def removeOldFiles(d):
 	except:
 		pass
 
+def getSingleCount(blog):
+	return int(blog['reposts_count']) + int(blog['comments_count']) + int(blog['attitudes_count'])
+
 def getCount(blog):
+	count = getSingleCount(blog)
+	if 'retweeted_status' in blog:
+		blog = blog['retweeted_status']
+		count += getSingleCount(blog) / 3
+	return count
 
 
 @log_on_fail(debug_group)
@@ -168,7 +176,6 @@ def loopImp():
 	sg.reset()
 	db.reload()
 	for user in db.users.items:
-		print(user)
 		url = 'https://m.weibo.cn/api/container/getIndex?type=uid&value=%s&containerid=107603%s' \
 			% (user, user)
 		content = sg.getContent(url)
@@ -179,7 +186,7 @@ def loopImp():
 			url = clearUrl(card['scheme'])
 			r = weibo_2_album.get(url)
 			r = album_sender.send(channel, url, r)
-
+			# add the url to existing
 
 def loop():
 	loopImp()
