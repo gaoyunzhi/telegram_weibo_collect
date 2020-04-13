@@ -32,3 +32,4 @@ class DB(object):
 		self.users = DBItem('users')
 		self.keywords = DBItem('keywords')
 		self.existing = DBItem('existing')
+		self.blacklist = DBItem('blacklist')

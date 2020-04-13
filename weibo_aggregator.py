@@ -55,6 +55,8 @@ def process(url):
 	for card in content['data']['cards']:
 		if getCount(card.get('mblog')) < 120:
 			continue
+		if matchKey(str(card), db.blacklist.items):
+			continue
 		url = clearUrl(card['scheme'])
 		if url in db.existing.items:
 			continue
