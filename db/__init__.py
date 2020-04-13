@@ -5,7 +5,7 @@ def getFile(name):
 	fn = 'db/' + name
 	os.system('touch ' + fn)
 	with open(fn) as f:
-		return set(x.strip() for x in f.readline() if x.strip())
+		return set([x.strip() for x in f.readlines() if x.strip()])
 
 class DBItem(object):
 	def __init__(self, name):

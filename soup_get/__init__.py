@@ -1,7 +1,10 @@
-from bs4 import BeautifulSoup
 import cached_url
 import time
 import random
+import yaml
+
+with open('credential') as f:
+	credential = yaml.load(f, Loader=yaml.FullLoader)
 
 class Timer(object):
 	def __init__(self):
@@ -24,8 +27,9 @@ class SoupGet(object):
 		self.num_requests = 0
 		self.timer.reset()
 
-	def getSoup(self, url):
+	def getContent(self, url):
 		self.num_requests += 1
 		wait = min(random.random() * 10, self.num_requests / 3 * random.random())
 		self.timer.wait(wait)
-		return BeautifulSoup(cached_url.get(url), 'html.parser')
+		return cached_url.get(url, 
+			headers = {'cookie': credential['cookie']})

@@ -13,6 +13,7 @@ import album_sender
 from soup_get import SoupGet, Timer
 from db import DB
 import threading
+import weibo_2_album
 
 with open('credential') as f:
 	credential = yaml.load(f, Loader=yaml.FullLoader)
@@ -157,6 +158,9 @@ def removeOldFiles(d):
 	except:
 		pass
 
+def getCount(blog):
+
+
 @log_on_fail(debug_group)
 def loopImp():
 	removeOldFiles('tmp')
@@ -164,9 +168,18 @@ def loopImp():
 	sg.reset()
 	db.reload()
 	for user in db.users.items:
-		soup = sg.getSoup('https://www.weibo.com/u/' + user)
-		for item in soup.find_all('div', class_='WB_from'):
-			print(item.find('a')['href'])
+		print(user)
+		url = 'https://m.weibo.cn/api/container/getIndex?type=uid&value=%s&containerid=107603%s' \
+			% (user, user)
+		content = sg.getContent(url)
+		content = yaml.load(content, Loader=yaml.FullLoader)
+		for card in content['data']['cards']:
+			if getCount(card['mblog']) < 120:
+				continue
+			url = clearUrl(card['scheme'])
+			r = weibo_2_album.get(url)
+			r = album_sender.send(channel, url, r)
+
 
 def loop():
 	loopImp()
