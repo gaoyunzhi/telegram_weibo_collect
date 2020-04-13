@@ -164,7 +164,7 @@ def loopImp():
 	sg.reset()
 	db.reload()
 	for user in db.users.items:
-		soup = sg.get('https://www.weibo.com/u/' + user)
+		soup = sg.getSoup('https://www.weibo.com/u/' + user)
 		for item in soup.find_all('div', class_='WB_from'):
 			print(item.find('a')['href'])
 

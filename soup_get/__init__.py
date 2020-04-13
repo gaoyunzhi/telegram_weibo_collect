@@ -24,7 +24,7 @@ class SoupGet(object):
 		self.num_requests = 0
 		self.timer.reset()
 
-	def getSoup(self, url, cookie):
+	def getSoup(self, url):
 		self.num_requests += 1
 		wait = min(random.random() * 10, self.num_requests / 3 * random.random())
 		self.timer.wait(wait)
