@@ -26,6 +26,7 @@ channel = tele.bot.get_chat(-1001374366482)
 
 sg = SoupGet()
 db = DB()
+timer = Timer()
 
 def removeOldFiles(d):
 	try:
@@ -55,9 +56,12 @@ def process(url):
 		if getCount(card.get('mblog')) < 120:
 			continue
 		url = clearUrl(card['scheme'])
+		if url in db.existing.items:
+			continue
 		r = weibo_2_album.get(url)
+		timer.wait(len(r.imgs or [1]) * 10)
 		r = album_sender.send(channel, url, r)
-		# add the url to existing
+		db.existing.add(url)
 
 @log_on_fail(debug_group)
 def loopImp():
@@ -65,13 +69,12 @@ def loopImp():
 	removeOldFiles('tmp_image')
 	sg.reset()
 	db.reload()
-	# for user in db.users.items:
-	# 	url = 'https://m.weibo.cn/api/container/getIndex?type=uid&value=%s&containerid=107603%s' \
-	# 		% (user, user)
-	# 	process(url)
+	for user in db.users.items:
+		url = 'https://m.weibo.cn/api/container/getIndex?type=uid&value=%s&containerid=107603%s' \
+			% (user, user)
+		process(url)
 	for keyword in db.keywords.items:
 		content_id = urllib.request.pathname2url('100103type=1&q=' + keyword)
-		print(content_id)
 		url = 'https://m.weibo.cn/api/container/getIndex?containerid=%s&page_type=searchall' % content_id
 		process(url)
 
