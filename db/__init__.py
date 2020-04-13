@@ -1,5 +1,18 @@
 import os
 import yaml
+import threading
+import time
+
+last_commit = 0
+
+def commit():
+	global last_commit
+	if time.time() - last_commit < 20 * 60:
+		return
+	last_commit = time.time()
+    # see if I need to deal with race condition
+    command = 'git add . > /dev/null 2>&1 && git commit -m commit > /dev/null 2>&1 && git push -u -f > /dev/null 2>&1'
+    threading.Timer(60 * 20, lambda: os.system(command)).start()
 
 def getFile(name):
 	fn = 'db/' + name
@@ -19,10 +32,10 @@ class DBItem(object):
 		self.items.add(x)
 		with open(self.fn, 'a') as f:
 			f.write('\n' + x)
+		commit()
 
 	def remove(self, x):
 		raise Exception('To be implemented') 
-
 
 class DB(object):
 	def __init__(self):
