@@ -73,11 +73,12 @@ def loopImp():
 		url = 'https://m.weibo.cn/api/container/getIndex?type=uid&value=%s&containerid=107603%s' \
 			% (user, user)
 		process(url)
+		print(user)
 	for keyword in db.keywords.items:
 		content_id = urllib.request.pathname2url('100103type=1&q=' + keyword)
 		url = 'https://m.weibo.cn/api/container/getIndex?containerid=%s&page_type=searchall' % content_id
 		process(url)
-
+		print(keyword)
 
 def loop():
 	loopImp()
