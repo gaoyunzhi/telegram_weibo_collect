@@ -56,6 +56,12 @@ def process(url):
 	print(2)
 	content = yaml.load(content, Loader=yaml.FullLoader)
 	print(3)
+	try:
+		content['data']['cards']
+	except:
+		for x in content['data']:
+			print(str(x)[:10])
+		return
 	for card in content['data']['cards']:
 		print('a')
 		if getCount(card.get('mblog')) < 120:
@@ -66,12 +72,19 @@ def process(url):
 		if url in db.existing.items:
 			continue
 		print('b')
-		r = weibo_2_album.get(url)
+		try:
+			r = weibo_2_album.get(url)
+		except:
+			continue
 		if r.wid in db.existing.items or r.rwid in db.existing.items:
 			continue
 		print(r.wid, r.rwid)
 		timer.wait(10)
-		album_sender.send(channel, url, r)
+		try:
+			album_sender.send(channel, url, r)
+		except Exception as e:
+			print(e)
+			continue
 		print('c')
 		db.existing.add(url)
 		db.existing.add(r.wid)
