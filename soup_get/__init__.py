@@ -15,6 +15,7 @@ class Timer(object):
 
 	def wait(self, wait):
 		if time.time() - self.last_request < wait:
+			print('wait', wait + self.last_request - time.time())
 			time.sleep(wait + self.last_request - time.time())
 		self.last_request = time.time()
 
