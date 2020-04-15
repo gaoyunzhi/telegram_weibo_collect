@@ -56,6 +56,7 @@ def process(url):
 	content = yaml.load(content, Loader=yaml.FullLoader)
 	print(3)
 	for card in content['data']['cards']:
+		print('a')
 		if getCount(card.get('mblog')) < 120:
 			continue
 		if matchKey(str(card), db.blacklist.items):
@@ -63,14 +64,14 @@ def process(url):
 		url = clearUrl(card['scheme'])
 		if url in db.existing.items:
 			continue
-		print(3)
+		print('b')
 		r = weibo_2_album.get(url)
 		if r.wid in db.existing.items or r.rwid in db.existing.items:
 			continue
 		print(r.wid, r.rwid)
 		timer.wait(10)
 		album_sender.send(channel, url, r)
-		print(4)
+		print('c')
 		db.existing.add(url)
 		db.existing.add(r.wid)
 		db.existing.add(r.rwid)
