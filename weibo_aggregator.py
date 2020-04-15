@@ -64,8 +64,10 @@ def process(url):
 		if r.wid in db.existing.items or r.rwid in db.existing.items:
 			continue
 		timer.wait(len(r.imgs or [1]) * 10)
-		r = album_sender.send(channel, url, r)
+		album_sender.send(channel, url, r)
 		db.existing.add(url)
+		db.existing.add(r.wid)
+		db.existing.add(r.rwid)
 
 @log_on_fail(debug_group)
 def loopImp():
