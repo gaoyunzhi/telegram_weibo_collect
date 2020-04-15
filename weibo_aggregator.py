@@ -51,6 +51,7 @@ def getCount(blog):
 
 def process(url):
 	print(1)
+	print(url)
 	content = sg.getContent(url)
 	print(2)
 	content = yaml.load(content, Loader=yaml.FullLoader)
