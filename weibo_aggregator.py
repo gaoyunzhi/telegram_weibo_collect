@@ -54,6 +54,7 @@ def process(url):
 	content = sg.getContent(url)
 	print(2)
 	content = yaml.load(content, Loader=yaml.FullLoader)
+	print(3)
 	for card in content['data']['cards']:
 		if getCount(card.get('mblog')) < 120:
 			continue
