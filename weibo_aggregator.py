@@ -67,7 +67,7 @@ def process(url):
 		if r.wid in db.existing.items or r.rwid in db.existing.items:
 			continue
 		print(r.wid, r.rwid)
-		timer.wait(len(r.imgs or [1]) * 10)
+		timer.wait(10)
 		album_sender.send(channel, url, r)
 		print(4)
 		db.existing.add(url)
