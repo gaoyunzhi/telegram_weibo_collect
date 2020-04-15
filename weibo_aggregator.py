@@ -62,6 +62,7 @@ def process(url):
 			continue
 		r = weibo_2_album.get(url)
 		if r.wid in db.existing.items or r.rwid in db.existing.items:
+			continue
 		timer.wait(len(r.imgs or [1]) * 10)
 		r = album_sender.send(channel, url, r)
 		db.existing.add(url)
