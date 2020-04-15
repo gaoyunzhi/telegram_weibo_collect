@@ -50,7 +50,9 @@ def getCount(blog):
 	return count
 
 def process(url):
+	print(1)
 	content = sg.getContent(url)
+	print(2)
 	content = yaml.load(content, Loader=yaml.FullLoader)
 	for card in content['data']['cards']:
 		if getCount(card.get('mblog')) < 120:
@@ -60,12 +62,14 @@ def process(url):
 		url = clearUrl(card['scheme'])
 		if url in db.existing.items:
 			continue
+		print(3)
 		r = weibo_2_album.get(url)
 		if r.wid in db.existing.items or r.rwid in db.existing.items:
 			continue
 		print(r.wid, r.rwid)
 		timer.wait(len(r.imgs or [1]) * 10)
 		album_sender.send(channel, url, r)
+		print(4)
 		db.existing.add(url)
 		db.existing.add(r.wid)
 		db.existing.add(r.rwid)
