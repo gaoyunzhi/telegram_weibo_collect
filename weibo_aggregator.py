@@ -38,7 +38,11 @@ def removeOldFiles(d):
 		pass
 
 def getSingleCount(blog):
-	return int(blog['reposts_count']) + int(blog['comments_count']) + int(blog['attitudes_count'])
+	try:
+		return int(blog['reposts_count']) + int(blog['comments_count']) + int(blog['attitudes_count'])
+	except:
+		print(str(blog)[:100])
+		return 0
 
 def getCount(blog):
 	if not blog:
