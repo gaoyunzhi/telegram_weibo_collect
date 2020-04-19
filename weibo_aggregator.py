@@ -53,6 +53,13 @@ def getCount(blog):
 		count += getSingleCount(blog) / 3
 	return count
 
+def shouldSend(card):
+	if matchKey(str(card), db.whitelist.items):
+		return True
+	if matchKey(str(card), db.blacklist.items):
+		return False
+	return getCount(card.get('mblog')) > 120
+	
 def process(url):
 	print(1)
 	print(url)
@@ -68,9 +75,7 @@ def process(url):
 		return
 	for card in content['data']['cards']:
 		print('a')
-		if getCount(card.get('mblog')) < 120:
-			continue
-		if matchKey(str(card), db.blacklist.items):
+		if not shouldSend(card):
 			continue
 		url = clearUrl(card['scheme'])
 		if url in db.existing.items:

@@ -46,3 +46,4 @@ class DB(object):
 		self.keywords = DBItem('keywords')
 		self.existing = DBItem('existing')
 		self.blacklist = DBItem('blacklist')
+		self.whitelist = DBItem('whitelist')
