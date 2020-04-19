@@ -99,6 +99,8 @@ def process(url):
 		db.existing.add(url)
 		db.existing.add(r.wid)
 		db.existing.add(r.rwid)
+		# rwid = '' will cause every time we only push one new item, which
+		# is a bug, but can be used as a feature... 
 
 @log_on_fail(debug_group)
 def loopImp():
