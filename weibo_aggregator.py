@@ -70,7 +70,7 @@ def process(url):
 	try:
 		content['data']['cards']
 	except:
-		for x in content['data']:
+		for x in content:
 			print(str(x)[:10])
 		return
 	for card in content['data']['cards']:
