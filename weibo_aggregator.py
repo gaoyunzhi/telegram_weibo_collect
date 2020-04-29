@@ -59,6 +59,11 @@ def shouldSend(card):
 	if matchKey(str(card), db.blacklist.items):
 		return False
 	return getCount(card.get('mblog')) > 120
+
+def meaningful(result):
+	if result.imgs or result.video:
+		return True
+	return '/' in result.cap
 	
 def process(url):
 	print(1)
@@ -87,6 +92,8 @@ def process(url):
 			continue
 		print('b1')
 		if r.wid in db.existing.items or r.rwid in db.existing.items:
+			continue
+		if not meaningful(r):
 			continue
 		print(r.wid, r.rwid)
 		timer.wait(10)
