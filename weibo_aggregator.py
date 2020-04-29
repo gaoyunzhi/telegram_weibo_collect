@@ -63,6 +63,8 @@ def shouldSend(card):
 def meaningful(result):
 	if result.imgs or result.video:
 		return True
+	if '/' not in result.cap:
+		print(result.cap)
 	return '/' in result.cap
 	
 def process(url):
