@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from telegram_util import matchKey, cutCaption, clearUrl, splitCommand, autoDestroy, log_on_fail, compactText
+from telegram_util import matchKey, cutCaption, clearUrl, splitCommand, autoDestroy, log_on_fail, compactText, isUrl
 import sys
 import os
 from telegram.ext import Updater, MessageHandler, Filters
@@ -27,6 +27,8 @@ channel = tele.bot.get_chat(-1001374366482)
 sg = SoupGet()
 db = DB()
 timer = Timer()
+
+LINK_KEYS = ['http', 'www', 'com', 'cn', 'telegra', '']
 
 def removeOldFiles(d):
 	try:
@@ -63,9 +65,11 @@ def shouldSend(card):
 def meaningful(result):
 	if result.imgs or result.video:
 		return True
-	if '/' not in result.cap:
+	if isUrl(result.cap):
+		return True
+	else:
 		print(result.cap)
-	return '/' in result.cap
+		return False
 	
 def process(url):
 	print(1)
