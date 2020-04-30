@@ -95,6 +95,7 @@ def process(url):
 		if not meaningful(r):
 			continue
 		print(url, r.wid, r.rwid)
+		print(r)
 		timer.wait(10)
 		try:
 			album_sender.send(channel, url, r)
