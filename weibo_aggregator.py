@@ -65,19 +65,15 @@ def shouldSend(card):
 def meaningful(result):
 	if result.imgs or result.video:
 		return True
-	if isUrl(result.cap):
+	if isUrl(result.cap) or '林老师' in result.cap:
 		return True
 	else:
 		print(result.cap)
 		return False
 	
 def process(url):
-	print(1)
-	print(url)
 	content = sg.getContent(url)
-	print(2)
 	content = yaml.load(content, Loader=yaml.FullLoader)
-	print(3)
 	try:
 		content['data']['cards']
 	except:
@@ -85,30 +81,26 @@ def process(url):
 			print(str(x)[:10])
 		return
 	for card in content['data']['cards']:
-		print('a')
 		if not shouldSend(card):
 			continue
 		url = clearUrl(card['scheme'])
 		if url in db.existing.items:
 			continue
-		print('b')
 		try:
 			r = weibo_2_album.get(url)
 		except:
 			continue
-		print('b1')
 		if r.wid in db.existing.items or r.rwid in db.existing.items:
 			continue
 		if not meaningful(r):
 			continue
-		print(r.wid, r.rwid)
+		print(url, r.wid, r.rwid)
 		timer.wait(10)
 		try:
 			album_sender.send(channel, url, r)
 		except Exception as e:
 			print(e)
 			continue
-		print('c')
 		db.existing.add(url)
 		db.existing.add(r.wid)
 		db.existing.add(r.rwid)
