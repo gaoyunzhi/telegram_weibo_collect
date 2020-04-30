@@ -65,7 +65,7 @@ def shouldSend(card):
 def meaningful(result):
 	if result.imgs or result.video:
 		return True
-	if isUrl(result.cap) or '林老师' in result.cap:
+	if isUrl(result.cap) and '身着狮皮' not in result.cap:
 		return True
 	else:
 		print(result.cap)
@@ -95,7 +95,6 @@ def process(url):
 		if not meaningful(r):
 			continue
 		print(url, r.wid, r.rwid)
-		print(r)
 		timer.wait(10)
 		try:
 			album_sender.send(channel, url, r)
