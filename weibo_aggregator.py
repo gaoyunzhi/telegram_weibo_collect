@@ -123,6 +123,7 @@ def loopImp():
 			% (user, user)
 		process(url)
 		print(user)
+	print('loop finished')
 
 def loop():
 	loopImp()
