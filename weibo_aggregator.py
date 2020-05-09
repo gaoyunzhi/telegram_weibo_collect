@@ -77,6 +77,9 @@ def process(url):
 	try:
 		content['data']['cards']
 	except:
+		if not content:
+			print('no content')
+			return
 		for x in content:
 			print(str(x)[:10])
 		return
