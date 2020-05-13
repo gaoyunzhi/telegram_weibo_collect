@@ -127,6 +127,9 @@ def loopImp():
 		process(url)
 		print(user)
 	print('loop finished')
+	command = 'git add . > /dev/null 2>&1 && git commit -m commit > /dev/null 2>&1 && git push -u -f > /dev/null 2>&1'
+	os.system(command)
+	print('commit finished')
 
 def loop():
 	loopImp()
