@@ -130,7 +130,7 @@ def loopImp():
 
 def loop():
 	loopImp()
-	threading.Timer(60 * 60 * 2, loop).start() 
+	threading.Timer(60 * 60, loop).start() 
 
 @log_on_fail(debug_group)
 def command(update, context):
