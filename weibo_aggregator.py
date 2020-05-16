@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from telegram_util import matchKey, cutCaption, clearUrl, splitCommand, autoDestroy, log_on_fail, isUrl
+from telegram_util import matchKey, cutCaption, clearUrl, splitCommand, autoDestroy, log_on_fail
 import sys
 import os
 from telegram.ext import Updater, MessageHandler, Filters
@@ -61,15 +61,6 @@ def shouldSend(card):
 	if matchKey(str(card), db.blacklist.items):
 		return False
 	return getCount(card.get('mblog')) > 120
-
-def meaningful(result):
-	if result.imgs or result.video:
-		return True
-	if isUrl(result.cap) and '身着狮皮' not in result.cap:
-		return True
-	else:
-		print(result.cap)
-		return False
 	
 def process(url):
 	content = sg.getContent(url)
@@ -94,8 +85,6 @@ def process(url):
 		except:
 			continue
 		if r.wid in db.existing.items or r.rwid in db.existing.items:
-			continue
-		if not meaningful(r):
 			continue
 		print(url, r.wid, r.rwid)
 		timer.wait(10)
