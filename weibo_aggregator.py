@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from telegram_util import matchKey, cutCaption, clearUrl, splitCommand, autoDestroy, log_on_fail, compactText, isUrl
+from telegram_util import matchKey, cutCaption, clearUrl, splitCommand, autoDestroy, log_on_fail, isUrl
 import sys
 import os
 from telegram.ext import Updater, MessageHandler, Filters
