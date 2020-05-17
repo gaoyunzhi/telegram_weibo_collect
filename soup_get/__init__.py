@@ -14,9 +14,10 @@ class Timer(object):
 		self.last_request = 0
 
 	def wait(self, wait):
-		if time.time() - self.last_request < wait:
-			print('wait', wait + self.last_request - time.time())
-			time.sleep(wait + self.last_request - time.time())
+		sleep_time = wait + self.last_request - time.time()
+		if sleep_time > 0
+			print('wait', sleep_time)
+			time.sleep(sleep_time)
 		self.last_request = time.time()
 
 class SoupGet(object):
