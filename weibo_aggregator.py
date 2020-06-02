@@ -102,7 +102,6 @@ def process(url):
 @log_on_fail(debug_group)
 def loopImp():
 	removeOldFiles('tmp')
-	removeOldFiles('tmp_image')
 	sg.reset()
 	db.reload()
 	for keyword in db.keywords.items:
