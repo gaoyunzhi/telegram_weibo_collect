@@ -5,7 +5,6 @@ from telegram_util import matchKey, cutCaption, clearUrl, splitCommand, autoDest
 import sys
 import os
 from telegram.ext import Updater, MessageHandler, Filters
-import export_to_telegraph
 import time
 import yaml
 import web_2_album
@@ -18,11 +17,10 @@ import urllib
 
 with open('credential') as f:
 	credential = yaml.load(f, Loader=yaml.FullLoader)
-export_to_telegraph.token = credential['telegraph_token']
 
 tele = Updater(credential['bot_token'], use_context=True) # @contribute_bot
-debug_group = tele.bot.get_chat(-1001198682178)
-channel = tele.bot.get_chat(-1001374366482)
+debug_group = tele.bot.get_chat('@b4cxb')
+channel = tele.bot.get_chat('@weibo_read')
 
 sg = SoupGet()
 db = DB()
