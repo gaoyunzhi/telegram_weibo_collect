@@ -22,6 +22,7 @@ channel = tele.bot.get_chat('@weibo_read')
 sg = SoupGet()
 db = DB()
 timer = Timer()
+cache = {}
 
 def getSingleCount(blog):
 	try:
@@ -53,22 +54,14 @@ def processCard(card):
 	if url in db.existing.items:
 		return
 
-	try:
-		r = weibo_2_album.get(url)
-	except Exception as e:
-		print('weibo_2_album exception', e)
-		return
+	r = weibo_2_album.get(url)
 	if r.wid in db.existing.items or r.rwid in db.existing.items:
 		return
 
 	print('sending', url, r.wid, r.rwid)
 	timer.wait(10)
 
-	try:
-		album_sender.send(channel, url, r)
-	except Exception as e:
-		print(e)
-		return
+	album_sender.send(channel, url, r)
 	
 	db.existing.add(url)
 	db.existing.add(r.wid)
@@ -84,7 +77,10 @@ def process(url):
 	except:
 		return # url read fail, may due to rate limiting
 	for card in content['data']['cards']:
-		processCard(card)
+		try:
+			processCard(card)
+		except Exception as e:
+			print(clearUrl(card['scheme']), e)
 	
 @log_on_fail(debug_group)
 def loopImp():
