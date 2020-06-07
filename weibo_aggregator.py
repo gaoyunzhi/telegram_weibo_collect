@@ -61,13 +61,16 @@ def processCard(card):
 	print('sending', url, r.wid, r.rwid)
 	timer.wait(10)
 
+	cache[url] = cache.get(url, 0) + 1
+	if cache[url] > 2:
+		# for whatever reason, this url does not send to telegram, skip
+		db.existing.add(url)
+
 	album_sender.send(channel, url, r)
 	
 	db.existing.add(url)
 	db.existing.add(r.wid)
 	db.existing.add(r.rwid)
-	# rwid = '' will cause every time we only push one new item, which
-	# is a bug, but can be seen as a feature... 
 	
 def process(url):
 	content = sg.getContent(url)

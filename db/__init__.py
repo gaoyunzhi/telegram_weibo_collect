@@ -27,7 +27,7 @@ class DBItem(object):
 
 	def add(self, x):
 		x = x.strip()
-		if x in self.items:
+		if not x or x in self.items:
 			return
 		self.items.add(x)
 		with open(self.fn, 'a') as f:
