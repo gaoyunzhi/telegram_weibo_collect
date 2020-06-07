@@ -83,10 +83,11 @@ def process(url):
 		try:
 			processCard(card)
 		except Exception as e:
-			print(clearUrl(card['scheme']), e)
+			debug_group.send_message(clearUrl(card['scheme']) + '\n' + str(e))
 	
 @log_on_fail(debug_group)
 def loopImp():
+	debug_group.send_message('start loop')
 	removeOldFiles('tmp')
 	sg.reset()
 	db.reload()
@@ -102,6 +103,7 @@ def loopImp():
 		process(url)
 	commitRepo()
 	print('loop finished. commit in thread.')
+	debug_group.send_message('end loop')
 
 def loop():
 	loopImp()
