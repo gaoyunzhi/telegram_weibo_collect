@@ -45,6 +45,36 @@ def shouldSend(card):
 	if matchKey(str(card), db.blacklist.items):
 		return False
 	return getCount(card.get('mblog')) > 120
+
+def processCard(card):
+	if not shouldSend(card):
+		return
+	url = clearUrl(card['scheme'])
+	if url in db.existing.items:
+		return
+
+	try:
+		r = weibo_2_album.get(url)
+	except Exception as e:
+		print('weibo_2_album exception', e)
+		return
+	if r.wid in db.existing.items or r.rwid in db.existing.items:
+		return
+
+	print('sending', url, r.wid, r.rwid)
+	timer.wait(10)
+
+	try:
+		album_sender.send(channel, url, r)
+	except Exception as e:
+		print(e)
+		return
+	
+	db.existing.add(url)
+	db.existing.add(r.wid)
+	db.existing.add(r.rwid)
+	# rwid = '' will cause every time we only push one new item, which
+	# is a bug, but can be seen as a feature... 
 	
 def process(url):
 	content = sg.getContent(url)
@@ -52,37 +82,10 @@ def process(url):
 	try:
 		content['data']['cards']
 	except:
-		if not content:
-			print('no content')
-			return
-		for x in content:
-			print(str(x)[:10])
-		return
+		return # url read fail, may due to rate limiting
 	for card in content['data']['cards']:
-		if not shouldSend(card):
-			continue
-		url = clearUrl(card['scheme'])
-		if url in db.existing.items:
-			continue
-		try:
-			r = weibo_2_album.get(url)
-		except:
-			continue
-		if r.wid in db.existing.items or r.rwid in db.existing.items:
-			continue
-		print(url, r.wid, r.rwid)
-		timer.wait(10)
-		try:
-			album_sender.send(channel, url, r)
-		except Exception as e:
-			print(e)
-			continue
-		db.existing.add(url)
-		db.existing.add(r.wid)
-		db.existing.add(r.rwid)
-		# rwid = '' will cause every time we only push one new item, which
-		# is a bug, but can be used as a feature... 
-
+		processCard(card)
+	
 @log_on_fail(debug_group)
 def loopImp():
 	removeOldFiles('tmp')
