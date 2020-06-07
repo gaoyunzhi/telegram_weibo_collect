@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from telegram_util import matchKey, cutCaption, clearUrl, splitCommand, autoDestroy, log_on_fail
+from telegram_util import matchKey, clearUrl, log_on_fail, removeOldFiles, commitRepo
 import sys
-import os
 from telegram.ext import Updater, MessageHandler, Filters
-import time
 import yaml
-import web_2_album
 import album_sender
 from soup_get import SoupGet, Timer
 from db import DB
@@ -19,23 +16,12 @@ with open('credential') as f:
 	credential = yaml.load(f, Loader=yaml.FullLoader)
 
 tele = Updater(credential['bot_token'], use_context=True) # @contribute_bot
-debug_group = tele.bot.get_chat('@b4cxb')
+debug_group = tele.bot.get_chat(420074357)
 channel = tele.bot.get_chat('@weibo_read')
 
 sg = SoupGet()
 db = DB()
 timer = Timer()
-
-LINK_KEYS = ['http', 'www', 'com', 'cn', 'telegra', '']
-
-def removeOldFiles(d):
-	try:
-		for x in os.listdir(d):
-			if os.path.getmtime(d + '/' + x) < time.time() - 60 * 60 * 72 or \
-				os.stat(d + '/' + x).st_size < 400:
-				os.system('rm ' + d + '/' + x)
-	except:
-		pass
 
 def getSingleCount(blog):
 	try:
@@ -103,36 +89,21 @@ def loopImp():
 	sg.reset()
 	db.reload()
 	for keyword in db.keywords.items:
+		print(keyword)
 		content_id = urllib.request.pathname2url('100103type=1&q=' + keyword)
 		url = 'https://m.weibo.cn/api/container/getIndex?containerid=%s&page_type=searchall' % content_id
 		process(url)
-		print(keyword)
 	for user in db.users.items:
+		print(user)
 		url = 'https://m.weibo.cn/api/container/getIndex?type=uid&value=%s&containerid=107603%s' \
 			% (user, user)
 		process(url)
-		print(user)
-	print('loop finished')
-	command = 'git add . > /dev/null 2>&1 && git commit -m commit > /dev/null 2>&1 && git push -u -f > /dev/null 2>&1'
-	os.system(command)
-	print('commit finished')
+	commitRepo()
+	print('loop finished. commit in thread.')
 
 def loop():
 	loopImp()
 	threading.Timer(60 * 60, loop).start() 
 
-@log_on_fail(debug_group)
-def command(update, context):
-	msg= update.channel_post
-	if not msg.text.startswith('/w'):
-		return
-	# TODO: add command to add user, add keyword, refer douban code if needed
-
-if 'once' not in sys.argv:
-	threading.Timer(1, loop).start()
-	tele.dispatcher.add_handler(MessageHandler(
-		Filters.update.channel_post & Filters.command, command))
-	tele.start_polling()
-	tele.idle()
-else:
-	loopImp()
+if __name__ == '__main__':
+	loop()
