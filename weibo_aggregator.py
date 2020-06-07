@@ -107,7 +107,7 @@ def loopImp():
 
 def loop():
 	loopImp()
-	threading.Timer(60 * 60, loop).start() 
+	threading.Timer(60 * 10, loop).start() 
 
 if __name__ == '__main__':
 	loop()
