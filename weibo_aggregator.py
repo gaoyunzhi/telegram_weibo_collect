@@ -101,7 +101,7 @@ def loopImp():
 		url = 'https://m.weibo.cn/api/container/getIndex?type=uid&value=%s&containerid=107603%s' \
 			% (user, user)
 		process(url)
-	commitRepo()
+	commitRepo(delay_minute=0)
 	print('loop finished. commit in thread.')
 	debug_group.send_message('end loop')
 
