@@ -26,7 +26,7 @@ class DBItem(object):
 		self.fn = 'db/' + name
 
 	def add(self, x):
-		x = x.strip()
+		x = str(x).strip()
 		if not x or x in self.items:
 			return
 		self.items.add(x)
