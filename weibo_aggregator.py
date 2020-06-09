@@ -45,7 +45,9 @@ def shouldSend(card):
 		return True
 	if matchKey(str(card), db.blacklist.items):
 		return False
-	return getCount(card.get('mblog')) > 120
+	if matchKey(str(card), db.preferlist.items):
+		return getCount(card.get('mblog')) > 120
+	return getCount(card.get('mblog')) > 300
 
 def processCard(card):
 	if not shouldSend(card):

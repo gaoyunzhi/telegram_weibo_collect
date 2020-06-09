@@ -47,3 +47,4 @@ class DB(object):
 		self.existing = DBItem('existing')
 		self.blacklist = DBItem('blacklist')
 		self.whitelist = DBItem('whitelist')
+		self.preferlist = DBItem('preferlist')
