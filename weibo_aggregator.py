@@ -56,8 +56,8 @@ def processCard(card):
 
 	r = weibo_2_album.get(url)
 	print('hash', r.hash)
-	if (r.wid in db.existing.items or r.rwid in db.existing.items or 
-		r.hash in db.existing.items):
+	if (str(r.wid) in db.existing.items or str(r.rwid) in db.existing.items or 
+		str(r.hash) in db.existing.items):
 		return
 
 	print('sending', url, r.wid, r.rwid)
