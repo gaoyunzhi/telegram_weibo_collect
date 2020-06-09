@@ -48,3 +48,4 @@ class DB(object):
 		self.blacklist = DBItem('blacklist')
 		self.whitelist = DBItem('whitelist')
 		self.preferlist = DBItem('preferlist')
+		self.popularlist = DBItem('popularlist')

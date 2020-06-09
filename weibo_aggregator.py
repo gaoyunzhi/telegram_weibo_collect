@@ -47,6 +47,8 @@ def shouldSend(card):
 		return False
 	if matchKey(str(card), db.preferlist.items):
 		return getCount(card.get('mblog')) > 300
+	if matchKey(str(card), db.popularlist.items):
+		return getCount(card.get('mblog')) > 10000
 	return getCount(card.get('mblog')) > 1000
 
 def processCard(card):
