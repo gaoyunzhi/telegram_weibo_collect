@@ -55,22 +55,25 @@ def processCard(card):
 		return
 
 	r = weibo_2_album.get(url)
-	if r.wid in db.existing.items or r.rwid in db.existing.items:
+	print('hash', r.hash)
+	if (r.wid in db.existing.items or r.rwid in db.existing.items or 
+		r.hash in db.existing.items):
 		return
 
 	print('sending', url, r.wid, r.rwid)
 	timer.wait(10)
 
-	cache[url] = cache.get(url, 0) + 1
-	if cache[url] > 2:
+	cache[r.hash] = cache.get(r.hash, 0) + 1
+	if cache[r.hash] > 2:
 		# for whatever reason, this url does not send to telegram, skip
-		db.existing.add(url)
+		db.existing.add(r.hash)
 
 	album_sender.send(channel, url, r)
 	
 	db.existing.add(url)
 	db.existing.add(r.wid)
 	db.existing.add(r.rwid)
+	db.existing.add(r.hash)
 	
 def process(url):
 	content = sg.getContent(url)
