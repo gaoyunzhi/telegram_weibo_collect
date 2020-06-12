@@ -82,10 +82,6 @@ def processCard(card):
 def process(url):
 	content = sg.getContent(url)
 	content = yaml.load(content, Loader=yaml.FullLoader)
-	try:
-		content['data']['cards']
-	except:
-		return # url read fail, may due to rate limiting
 	for card in content['data']['cards']:
 		try:
 			processCard(card)
