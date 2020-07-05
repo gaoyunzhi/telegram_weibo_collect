@@ -90,7 +90,6 @@ def process(url):
 	
 @log_on_fail(debug_group)
 def loopImp():
-	debug_group.send_message('start loop')
 	removeOldFiles('tmp', day=0.1)
 	sg.reset()
 	db.reload()
@@ -106,7 +105,6 @@ def loopImp():
 		process(url)
 	commitRepo(delay_minute=0)
 	print('loop finished. commit in thread.')
-	debug_group.send_message('end loop')
 
 def loop():
 	loopImp()
